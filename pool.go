@@ -212,6 +212,11 @@ func (p *pool) Get() (Conn, error) {
 	return p.conns[next], nil
 }
 
+func (p *pool) GetConn() Conn {
+	conn, _ := p.Get()
+	return conn
+}
+
 // Close see Pool interface.
 func (p *pool) Close() error {
 	atomic.StoreUint32(&p.index, 0)
