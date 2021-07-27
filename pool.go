@@ -33,6 +33,7 @@ type Pool interface {
 	// it back to the Pool. Closing it when the pool is destroyed or full will
 	// be counted as an error. we guarantee the conn.Value() isn't nil when conn isn't nil.
 	Get() (Conn, error)
+
 	GetConn() Conn
 
 	// Close closes the pool and all its connections. After Close() the pool is
@@ -215,6 +216,8 @@ func (p *pool) Get() (Conn, error) {
 
 func (p *pool) GetConn() Conn {
 	conn, _ := p.Get()
+	conn.Value().Close()
+	conn.Close()
 	return conn
 }
 
