@@ -34,8 +34,6 @@ type Pool interface {
 	// be counted as an error. we guarantee the conn.Value() isn't nil when conn isn't nil.
 	Get() (Conn, error)
 
-	GetConn() Conn
-
 	// Close closes the pool and all its connections. After Close() the pool is
 	// no longer usable. You can't make concurrent calls Close and Get method.
 	// It will be cause panic.
@@ -212,13 +210,6 @@ func (p *pool) Get() (Conn, error) {
 	p.Unlock()
 	next := atomic.AddUint32(&p.index, 1) % uint32(current)
 	return p.conns[next], nil
-}
-
-func (p *pool) GetConn() Conn {
-	conn, _ := p.Get()
-	conn.Value().Close()
-	conn.Close()
-	return conn
 }
 
 // Close see Pool interface.
