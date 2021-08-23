@@ -1,4 +1,4 @@
-module github.com/gogrpc/pool
+module github.com/ppkg/pool
 
 go 1.14
 
